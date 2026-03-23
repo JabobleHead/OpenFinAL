@@ -1,12 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import { IViewComponent } from "../IViewComponent";
 import { PowerPoint } from "../../LearningModule/Slideshow/PowerPoint.jsx";
+import { ViewComponentWrapper } from "../ViewComponentWrapper.jsx";
 
 interface PowerPointComponentState {
   availableWidth: number;
 }
 
-export class PowerPointComponent extends Component<{}, PowerPointComponentState> implements IViewComponent {
+export class PowerPointComponent extends ViewComponentWrapper implements IViewComponent {
+    declare state: PowerPointComponentState;
+
     height: number = null;
     width: number = null;
     isContainer: boolean = false;
@@ -20,7 +23,7 @@ export class PowerPointComponent extends Component<{}, PowerPointComponentState>
     label: string = "PowerPoint Learning Module";
     description: string = "Component for displaying PowerPoint presentations";
     tags: string[] = ["PowerPoint", "Presentation", "Slideshow", "Learning Module"];
-    minimumProficiencyRequirements: Map<string, number> = null;
+    minimumProficiencyRequirements: Map<string, number> = new Map();
     requiresInternet: boolean = true;
 
     containerRef: React.RefObject<HTMLDivElement>;
@@ -29,14 +32,22 @@ export class PowerPointComponent extends Component<{}, PowerPointComponentState>
     
     constructor(props: any = {}) {
         super(props);
+
+        this.widthRatio = 16;
+        this.heightRatio = 9;
+        this.heightWidthRatioMultiplier = 56;
+        this.label = "PowerPoint Learning Module";
+        this.description = "Component for displaying PowerPoint presentations";
+        this.tags = ["PowerPoint", "Presentation", "Slideshow", "Learning Module"];
+        this.minimumProficiencyRequirements = new Map();
+        this.requiresInternet = true;
+
         this.containerRef = React.createRef();
         this.state = {
             availableWidth: 0
         };
 
         this.pptxPath = props['pptxPath'] || "";
-
-        this.calculateRatioMultiplier = this.calculateRatioMultiplier.bind(this);
     }
 
     componentDidMount() {
@@ -60,12 +71,7 @@ export class PowerPointComponent extends Component<{}, PowerPointComponentState>
     }
 
     calculateRatioMultiplier(): number {
-        this.heightWidthRatioMultiplier = Math.floor(this.state.availableWidth / this.widthRatio);
-
-        this.width = this.heightWidthRatioMultiplier * this.widthRatio;
-        this.height = this.heightWidthRatioMultiplier * this.heightRatio;
-
-        return this.heightWidthRatioMultiplier;
+        return super.calculateRatioMultiplier(this.state.availableWidth);
     }
 
     render(): React.ReactNode {
