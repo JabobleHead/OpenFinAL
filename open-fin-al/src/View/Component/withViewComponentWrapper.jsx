@@ -8,7 +8,34 @@ import { ViewComponentWrapper } from "./ViewComponentWrapper.jsx";
 export function withViewComponentWrapper(WrappedComponent, defaultConfig = {}) {
     class WrappedWithViewComponentControl extends ViewComponentWrapper {
         constructor(props = {}) {
-            super({ ...defaultConfig, ...props });
+            super(props);
+
+            const mergedConfig = { ...defaultConfig, ...props };
+            const configurableFields = [
+                "height",
+                "width",
+                "isContainer",
+                "resizable",
+                "maintainAspectRatio",
+                "heightRatio",
+                "widthRatio",
+                "heightWidthRatioMultiplier",
+                "visible",
+                "enabled",
+                "label",
+                "description",
+                "tags",
+                "minimumProficiencyRequirements",
+                "requiresInternet",
+                "childComponents",
+                "componentKey",
+            ];
+
+            configurableFields.forEach((field) => {
+                if (Object.prototype.hasOwnProperty.call(mergedConfig, field)) {
+                    this[field] = mergedConfig[field];
+                }
+            });
         }
 
         componentDidMount() {
