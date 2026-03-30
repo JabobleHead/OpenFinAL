@@ -9,8 +9,9 @@ import { StockInteractor } from "../../Interactor/StockInteractor";
 import { FinancialRatioInteractor } from "../../Interactor/FinancialRatioInteractor";
 import { JSONRequest } from "../../Gateway/Request/JSONRequest";
 import { SymbolSearchBar } from "../Shared/SymbolSearchBar";
+import { withViewComponentWrapper } from "../Component/withViewComponentWrapper.jsx";
 
-function  TickerSearchBar(props) {
+function TickerSearchBarBase(props) {
     //TODO: implement error handling
 
     //Gets all data for a ticker and updates the props with the data
@@ -213,5 +214,16 @@ function  TickerSearchBar(props) {
         <SymbolSearchBar fetchData={fetchAllData} state={props.state} onSymbolChange={handleSymbolChange}/>
     );
 }
+
+const TickerSearchBar = withViewComponentWrapper(TickerSearchBarBase, {
+    componentKey: "stock.tickerSearchBar",
+    isContainer: false,
+    visible: true,
+    label: "Stock Ticker Search",
+    description: "Search input and fetch workflow for stock ticker data across price and SEC endpoints.",
+    tags: ["stock", "ticker", "search", "market data"],
+    minimumProficiencyRequirements: new Map([["financialKnowledge", 1]]),
+    requiresInternet: true,
+});
 
 export { TickerSearchBar }

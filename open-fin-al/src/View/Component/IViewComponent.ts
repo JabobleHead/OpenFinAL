@@ -17,5 +17,33 @@ export interface IViewComponent {
     minimumProficiencyRequirements: Map<string, number>; // Map of <requirementLabel, requirementLevel>
     requiresInternet: boolean;
 
+    getVisibility(): boolean;
+    setVisibility(visible: boolean): boolean;
+
+    getSize(): { height: number; width: number };
+    setSize(height?: number, width?: number): { height: number; width: number };
+    getHeight(): number;
+    setHeight(height: number): number;
+    getWidth(): number;
+    setWidth(width: number): number;
+
+    getLabel(): string;
+    setLabel(label: string): string;
+    getDescription(): string;
+    setDescription(description: string): string;
+    getTags(): string[];
+    setTags(tags: string[]): string[];
+
+    getChildren(): IViewComponent[];
+    addChildComponent(component: IViewComponent): IViewComponent[];
+    removeChildComponent(component: IViewComponent): IViewComponent[];
+    clearChildComponents(): IViewComponent[];
+    setIsContainer(isContainer: boolean): boolean;
+
+    getFinancialKnowledgeLevel(requirementLabel?: string): number;
+    setFinancialKnowledgeLevel(level: number, requirementLabel?: string): number;
+    getMinimumProficiencyRequirements(): Map<string, number>;
+    setMinimumProficiencyRequirements(requirements: Map<string, number>): Map<string, number>;
+
     calculateRatioMultiplier(): number;
 }

@@ -13,8 +13,9 @@ import { UserInteractor } from "../../Interactor/UserInteractor";
 import { PortfolioInteractor } from "../../Interactor/PortfolioInteractor";
 import {PortfolioTransactionInteractor} from "../../Interactor/PortfolioTransactionInteractor";
 import { OrderInteractor } from "../../Interactor/OrderInteractor"; 
+import { withViewComponentWrapper } from "../Component/withViewComponentWrapper.jsx";
 
-function TimeSeriesChart(props) {
+function TimeSeriesChartBase(props) {
     const [currentQuote, setCurrentQuote] = useState({});
     const [chartColor, setChartColor] = useState("#62C0C2");
     const [toolTipStyle, setToolTipStyle] = useState({
@@ -301,6 +302,11 @@ function TimeSeriesChart(props) {
     const tickInterval = (priceMaxPadded - priceMinPadded) / (tickCount - 1);
     const ticks = Array.from({ length: tickCount }, (_, index) => (priceMinPadded + tickInterval * index).toFixed(2));
 
+    const componentSize = props.viewComponent ? props.viewComponent.getSize() : { width: null, height: null };
+    const chartWidth = componentSize.width && componentSize.width > 0 ? componentSize.width : 700;
+    const chartHeight = componentSize.height && componentSize.height > 0 ? componentSize.height : 300;
+    const barChartHeight = Math.max(100, Math.floor(chartHeight * 0.34));
+
     //TODO: calculate a max value for the y-axis that adds a little padding to top of graph    
     //TODO: set the min value for the x-axis to 9:00 AM and the max value to 5:00 PM when intraday data
     return(<>
@@ -332,7 +338,7 @@ function TimeSeriesChart(props) {
                 </div>
 
                 {/* The actual chart displaying the data from recharts */}
-                <AreaChart width={700} height={300} key="timeSeries" data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <AreaChart width={chartWidth} height={chartHeight} key="timeSeries" data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <defs>
                         <linearGradient id="colorArea" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="5%" stopColor={chartColor} stopOpacity={0.8}/>
@@ -349,7 +355,7 @@ function TimeSeriesChart(props) {
                     />
                     <Area type="monotone" dataKey="price" stroke={chartColor} fillOpacity={1} fill="url(#colorArea)" dot={false}/>
                 </AreaChart>
-                <BarChart width={700} height={100} data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <BarChart width={chartWidth} height={barChartHeight} data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                     <XAxis dataKey={props.state.type === "intraday" ? "time" : "date"} domain={[props.state.yAxisStart, props.state.yAxisEnd]} />
                     <YAxis domain={[0, props.state.maxVolume]} angle={-45} />
                     <CartesianGrid strokeDasharray="3 3" />
@@ -476,5 +482,18 @@ function TimeSeriesChart(props) {
             </div>
     </>);
 } 
+
+const TimeSeriesChart = withViewComponentWrapper(TimeSeriesChartBase, {
+    componentKey: "stock.timeSeriesChart",
+    isContainer: true,
+    visible: true,
+    width: 700,
+    height: 300,
+    label: "Stock Time Series Chart",
+    description: "Primary stock chart with timeframe controls, quote data, trading modal, and security details.",
+    tags: ["stock", "chart", "timeseries", "trading"],
+    minimumProficiencyRequirements: new Map([["financialKnowledge", 2]]),
+    requiresInternet: true,
+});
 
 export { TimeSeriesChart }

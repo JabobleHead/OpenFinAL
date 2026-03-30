@@ -6,8 +6,9 @@
 
 import React from "react";
 import RatioCalculator from "../../Utility/RatioCalculator";
+import { withViewComponentWrapper } from "../Component/withViewComponentWrapper.jsx";
 
-function TickerSidePanel(props) {
+function TickerSidePanelBase(props) {
     const ratioCalculator = new RatioCalculator(props.state.secData.response.results[0]["data"]);
     ratioCalculator.calculateRatios();
 
@@ -51,5 +52,16 @@ function TickerSidePanel(props) {
         </>
     );
 }
+
+const TickerSidePanel = withViewComponentWrapper(TickerSidePanelBase, {
+    componentKey: "stock.tickerSidePanel",
+    isContainer: true,
+    visible: true,
+    label: "Stock Metrics Side Panel",
+    description: "Side panel that displays company ratio metrics and triggers AI fundamental analysis.",
+    tags: ["stock", "ratios", "side panel", "analysis"],
+    minimumProficiencyRequirements: new Map([["financialKnowledge", 2]]),
+    requiresInternet: true,
+});
 
 export { TickerSidePanel }

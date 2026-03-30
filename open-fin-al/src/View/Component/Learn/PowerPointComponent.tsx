@@ -25,6 +25,7 @@ export class PowerPointComponent extends ViewComponentWrapper implements IViewCo
     tags: string[] = ["PowerPoint", "Presentation", "Slideshow", "Learning Module"];
     minimumProficiencyRequirements: Map<string, number> = new Map();
     requiresInternet: boolean = true;
+    childComponents: IViewComponent[] = [];
 
     containerRef: React.RefObject<HTMLDivElement>;
     observer: ResizeObserver | null = null;
@@ -74,7 +75,103 @@ export class PowerPointComponent extends ViewComponentWrapper implements IViewCo
         return super.calculateRatioMultiplier(this.state.availableWidth);
     }
 
+    getVisibility(): boolean {
+        return super.getVisibility();
+    }
+
+    setVisibility(visible: boolean): boolean {
+        return super.setVisibility(visible);
+    }
+
+    getSize(): { height: number; width: number } {
+        return super.getSize();
+    }
+
+    setSize(height?: number, width?: number): { height: number; width: number } {
+        return super.setSize(height, width);
+    }
+
+    getHeight(): number {
+        return super.getHeight();
+    }
+
+    setHeight(height: number): number {
+        return super.setHeight(height);
+    }
+
+    getWidth(): number {
+        return super.getWidth();
+    }
+
+    setWidth(width: number): number {
+        return super.setWidth(width);
+    }
+
+    getLabel(): string {
+        return super.getLabel();
+    }
+
+    setLabel(label: string): string {
+        return super.setLabel(label);
+    }
+
+    getDescription(): string {
+        return super.getDescription();
+    }
+
+    setDescription(description: string): string {
+        return super.setDescription(description);
+    }
+
+    getTags(): string[] {
+        return super.getTags();
+    }
+
+    setTags(tags: string[]): string[] {
+        return super.setTags(tags);
+    }
+
+    getChildren(): IViewComponent[] {
+        return super.getChildren();
+    }
+
+    addChildComponent(component: IViewComponent): IViewComponent[] {
+        return super.addChildComponent(component);
+    }
+
+    removeChildComponent(component: IViewComponent): IViewComponent[] {
+        return super.removeChildComponent(component);
+    }
+
+    clearChildComponents(): IViewComponent[] {
+        return super.clearChildComponents();
+    }
+
+    setIsContainer(isContainer: boolean): boolean {
+        return super.setIsContainer(isContainer);
+    }
+
+    getFinancialKnowledgeLevel(requirementLabel = "financialKnowledge"): number {
+        return super.getFinancialKnowledgeLevel(requirementLabel);
+    }
+
+    setFinancialKnowledgeLevel(level: number, requirementLabel = "financialKnowledge"): number {
+        return super.setFinancialKnowledgeLevel(level, requirementLabel);
+    }
+
+    getMinimumProficiencyRequirements(): Map<string, number> {
+        return super.getMinimumProficiencyRequirements();
+    }
+
+    setMinimumProficiencyRequirements(requirements: Map<string, number>): Map<string, number> {
+        return super.setMinimumProficiencyRequirements(requirements);
+    }
+
     render(): React.ReactNode {
+        if (!this.getVisibility()) {
+            return null;
+        }
+
         const multiplier = this.calculateRatioMultiplier();
         const ready = multiplier > 0 && this.width > 0 && this.height > 0;
 
