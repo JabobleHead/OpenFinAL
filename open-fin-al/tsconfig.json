@@ -10,7 +10,6 @@
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "moduleResolution": "node",
-      "ignoreDeprecations": "6.0",
       "importHelpers": true,
       "types": ["node", "jest"],
       "baseUrl": "./src",
